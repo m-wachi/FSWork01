@@ -14,8 +14,15 @@ let test01 (fileName: string) =
 
     let lexeme = LexBuffer<_>.LexemeString
 
-    let a = lexeme lexbuf
+    let a = Lexer.sts_initial lexbuf
+
+    //let a = lexeme lexbuf
+
     printfn "a=%A" a
+
+    let b = Lexer.sts_initial lexbuf
+
+    printfn "b=%A" b
 
     0
     //Parser.prog Lexer.sts_initial lexbuf

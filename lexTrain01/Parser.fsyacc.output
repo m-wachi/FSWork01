@@ -2,59 +2,79 @@
 ------------------------
 states = 
 state 0:  items:    _startprog ->  . prog
-  actions:    action 'EOF' (noprec):   shift 8
-    action 'INT' (noprec):   shift 5
+  actions:    action 'EOF' (noprec):   shift 9
+    action 'ID' (noprec):   shift 8
+    action 'INT' (noprec):   shift 7
     action 'error' (noprec):   error
     action '#' (noprec):   error
     action '$$' (noprec):   error
   immediate action: <none>  gotos:    goto prog: 1
-    goto File: 2
+    goto exps: 2
+    goto exp: 5
     goto end: 4
 state 1:  items:    _startprog -> prog . 
   actions:    action 'EOF' (noprec):   accept
+    action 'ID' (noprec):   accept
     action 'INT' (noprec):   accept
     action 'error' (noprec):   accept
     action '#' (noprec):   accept
     action '$$' (noprec):   accept
-  immediate action:   accept  gotos:state 2:  items:    prog -> File . end
-  actions:    action 'EOF' (noprec):   shift 8
+  immediate action:   accept  gotos:state 2:  items:    prog -> exps . end
+  actions:    action 'EOF' (noprec):   shift 9
+    action 'ID' (noprec):   error
     action 'INT' (noprec):   error
     action 'error' (noprec):   error
     action '#' (noprec):   error
     action '$$' (noprec):   error
   immediate action: <none>  gotos:    goto end: 3
-state 3:  items:    prog -> File end . 
-  actions:    action 'EOF' (noprec):   reduce prog --> File end
-    action 'INT' (noprec):   reduce prog --> File end
-    action 'error' (noprec):   reduce prog --> File end
-    action '#' (noprec):   reduce prog --> File end
-    action '$$' (noprec):   reduce prog --> File end
-  immediate action:   reduce prog --> File end  gotos:state 4:  items:    prog -> end . 
+state 3:  items:    prog -> exps end . 
+  actions:    action 'EOF' (noprec):   reduce prog --> exps end
+    action 'ID' (noprec):   reduce prog --> exps end
+    action 'INT' (noprec):   reduce prog --> exps end
+    action 'error' (noprec):   reduce prog --> exps end
+    action '#' (noprec):   reduce prog --> exps end
+    action '$$' (noprec):   reduce prog --> exps end
+  immediate action:   reduce prog --> exps end  gotos:state 4:  items:    prog -> end . 
   actions:    action 'EOF' (noprec):   reduce prog --> end
+    action 'ID' (noprec):   reduce prog --> end
     action 'INT' (noprec):   reduce prog --> end
     action 'error' (noprec):   reduce prog --> end
     action '#' (noprec):   reduce prog --> end
     action '$$' (noprec):   reduce prog --> end
-  immediate action:   reduce prog --> end  gotos:state 5:  items:    File -> 'INT' . 'INT' 'INT'
-  actions:    action 'EOF' (noprec):   error
-    action 'INT' (noprec):   shift 6
-    action 'error' (noprec):   error
-    action '#' (noprec):   error
-    action '$$' (noprec):   error
-  immediate action: <none>  gotos:state 6:  items:    File -> 'INT' 'INT' . 'INT'
-  actions:    action 'EOF' (noprec):   error
+  immediate action:   reduce prog --> end  gotos:state 5:  items:    exps -> exp . 
+    exps -> exp . exps
+  actions:    action 'EOF' (noprec):   reduce exps --> exp
+    action 'ID' (noprec):   shift 8
     action 'INT' (noprec):   shift 7
-    action 'error' (noprec):   error
-    action '#' (noprec):   error
-    action '$$' (noprec):   error
-  immediate action: <none>  gotos:state 7:  items:    File -> 'INT' 'INT' 'INT' . 
-  actions:    action 'EOF' (noprec):   reduce File --> 'INT' 'INT' 'INT'
-    action 'INT' (noprec):   reduce File --> 'INT' 'INT' 'INT'
-    action 'error' (noprec):   reduce File --> 'INT' 'INT' 'INT'
-    action '#' (noprec):   reduce File --> 'INT' 'INT' 'INT'
-    action '$$' (noprec):   reduce File --> 'INT' 'INT' 'INT'
-  immediate action:   reduce File --> 'INT' 'INT' 'INT'  gotos:state 8:  items:    end -> 'EOF' . 
+    action 'error' (noprec):   reduce exps --> exp
+    action '#' (noprec):   reduce exps --> exp
+    action '$$' (noprec):   reduce exps --> exp
+  immediate action: <none>  gotos:    goto exps: 6
+    goto exp: 5
+state 6:  items:    exps -> exp exps . 
+  actions:    action 'EOF' (noprec):   reduce exps --> exp exps
+    action 'ID' (noprec):   reduce exps --> exp exps
+    action 'INT' (noprec):   reduce exps --> exp exps
+    action 'error' (noprec):   reduce exps --> exp exps
+    action '#' (noprec):   reduce exps --> exp exps
+    action '$$' (noprec):   reduce exps --> exp exps
+  immediate action:   reduce exps --> exp exps  gotos:state 7:  items:    exp -> 'INT' . 
+  actions:    action 'EOF' (noprec):   reduce exp --> 'INT'
+    action 'ID' (noprec):   reduce exp --> 'INT'
+    action 'INT' (noprec):   reduce exp --> 'INT'
+    action 'error' (noprec):   reduce exp --> 'INT'
+    action '#' (noprec):   reduce exp --> 'INT'
+    action '$$' (noprec):   reduce exp --> 'INT'
+  immediate action:   reduce exp --> 'INT'  gotos:state 8:  items:    exp -> 'ID' . 
+  actions:    action 'EOF' (noprec):   reduce exp --> 'ID'
+    action 'ID' (noprec):   reduce exp --> 'ID'
+    action 'INT' (noprec):   reduce exp --> 'ID'
+    action 'error' (noprec):   reduce exp --> 'ID'
+    action '#' (noprec):   reduce exp --> 'ID'
+    action '$$' (noprec):   reduce exp --> 'ID'
+  immediate action:   reduce exp --> 'ID'  gotos:state 9:  items:    end -> 'EOF' . 
   actions:    action 'EOF' (noprec):   reduce end --> 'EOF'
+    action 'ID' (noprec):   reduce end --> 'EOF'
     action 'INT' (noprec):   reduce end --> 'EOF'
     action 'error' (noprec):   reduce end --> 'EOF'
     action '#' (noprec):   reduce end --> 'EOF'

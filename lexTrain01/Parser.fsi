@@ -2,16 +2,19 @@
 module Parser
 type token = 
   | EOF
+  | ID of (string)
   | INT of (System.Int32)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_ID
     | TOKEN_INT
     | TOKEN_end_of_input
     | TOKEN_error
 type nonTerminalId = 
     | NONTERM__startprog
     | NONTERM_prog
-    | NONTERM_File
+    | NONTERM_exps
+    | NONTERM_exp
     | NONTERM_end
 /// This function maps tokens to integer indexes
 val tagOfToken: token -> int

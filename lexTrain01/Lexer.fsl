@@ -33,6 +33,7 @@ let ident = ident_start_char ident_char*
 
 rule sts_initial = 
   parse ['-']?digit+   { Parser.INT (Int32.Parse(lexeme lexbuf))}
+      | letter+         { Parser.ID (lexeme lexbuf)}
       | whitespace	   { sts_initial lexbuf }
       | _    		  { failwith ("ParseError" + LexBuffer<_>.LexemeString lexbuf) }
       | eof   	  { Parser.EOF }

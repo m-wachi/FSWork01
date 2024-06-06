@@ -24,7 +24,7 @@ let parse_error_rich =
 let getInt (expInt: Ast.Exp) : int =
     match expInt with
     | Ast.IntExp v -> v
-    //| _ -> 0
+    | _ -> 0
 
 %}
 
@@ -33,6 +33,7 @@ let getInt (expInt: Ast.Exp) : int =
 
 // Regular tokens
 %token <System.Int32> INT
+%token <string> ID
 
 // Misc tokens
 %token EOF
@@ -45,11 +46,16 @@ let getInt (expInt: Ast.Exp) : int =
 
 // These are the rules of the grammar along with the F# code of the 
 // actions executed as rules are reduced.  
-prog: File end { $1 }
+prog: exps end { Prog $1 }
       | end      { $1 }
 
-File:
-    | INT INT INT                 { Prog [(Ast.IntExp $1); (Ast.IntExp $2); (Ast.IntExp $3)] }
+exps:
+    exp                        { [$1] }
+    | exp exps                 { $1 :: $2 }
+
+exp:
+    | INT                      { Ast.IntExp $1 }
+    | ID                       { Ast.VarExp $1 }
 
 // Using F# keywords for nonterminal names is okay.
 end: EOF { Prog [] }
