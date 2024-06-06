@@ -2,10 +2,12 @@
 module Parser
 type token = 
   | EOF
+  | DIM
   | ID of (string)
   | INT of (System.Int32)
 type tokenId = 
     | TOKEN_EOF
+    | TOKEN_DIM
     | TOKEN_ID
     | TOKEN_INT
     | TOKEN_end_of_input

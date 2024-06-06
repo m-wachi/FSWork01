@@ -34,6 +34,7 @@ let getInt (expInt: Ast.Exp) : int =
 // Regular tokens
 %token <System.Int32> INT
 %token <string> ID
+%token DIM
 
 // Misc tokens
 %token EOF
@@ -56,6 +57,7 @@ exps:
 exp:
     | INT                      { Ast.IntExp $1 }
     | ID                       { Ast.VarExp $1 }
+    | DIM                      { Ast.DimExp }
 
 // Using F# keywords for nonterminal names is okay.
 end: EOF { Prog [] }
