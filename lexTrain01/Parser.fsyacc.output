@@ -1,0 +1,52 @@
+        Output file describing compiled parser placed in Parser.fs and Parser.fsi
+------------------------
+states = 
+state 0:  items:    _startprog ->  . prog
+  actions:    action 'EOF' (noprec):   shift 6
+    action 'INT' (noprec):   shift 5
+    action 'error' (noprec):   error
+    action '#' (noprec):   error
+    action '$$' (noprec):   error
+  immediate action: <none>  gotos:    goto prog: 1
+    goto File: 2
+    goto end: 4
+state 1:  items:    _startprog -> prog . 
+  actions:    action 'EOF' (noprec):   accept
+    action 'INT' (noprec):   accept
+    action 'error' (noprec):   accept
+    action '#' (noprec):   accept
+    action '$$' (noprec):   accept
+  immediate action:   accept  gotos:state 2:  items:    prog -> File . end
+  actions:    action 'EOF' (noprec):   shift 6
+    action 'INT' (noprec):   error
+    action 'error' (noprec):   error
+    action '#' (noprec):   error
+    action '$$' (noprec):   error
+  immediate action: <none>  gotos:    goto end: 3
+state 3:  items:    prog -> File end . 
+  actions:    action 'EOF' (noprec):   reduce prog --> File end
+    action 'INT' (noprec):   reduce prog --> File end
+    action 'error' (noprec):   reduce prog --> File end
+    action '#' (noprec):   reduce prog --> File end
+    action '$$' (noprec):   reduce prog --> File end
+  immediate action:   reduce prog --> File end  gotos:state 4:  items:    prog -> end . 
+  actions:    action 'EOF' (noprec):   reduce prog --> end
+    action 'INT' (noprec):   reduce prog --> end
+    action 'error' (noprec):   reduce prog --> end
+    action '#' (noprec):   reduce prog --> end
+    action '$$' (noprec):   reduce prog --> end
+  immediate action:   reduce prog --> end  gotos:state 5:  items:    File -> 'INT' . 
+  actions:    action 'EOF' (noprec):   reduce File --> 'INT'
+    action 'INT' (noprec):   reduce File --> 'INT'
+    action 'error' (noprec):   reduce File --> 'INT'
+    action '#' (noprec):   reduce File --> 'INT'
+    action '$$' (noprec):   reduce File --> 'INT'
+  immediate action:   reduce File --> 'INT'  gotos:state 6:  items:    end -> 'EOF' . 
+  actions:    action 'EOF' (noprec):   reduce end --> 'EOF'
+    action 'INT' (noprec):   reduce end --> 'EOF'
+    action 'error' (noprec):   reduce end --> 'EOF'
+    action '#' (noprec):   reduce end --> 'EOF'
+    action '$$' (noprec):   reduce end --> 'EOF'
+  immediate action:   reduce end --> 'EOF'  gotos:
+startStates = 0
+------------------------
