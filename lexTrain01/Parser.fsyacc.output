@@ -2,7 +2,7 @@
 ------------------------
 states = 
 state 0:  items:    _startprog ->  . prog
-  actions:    action 'EOF' (noprec):   shift 6
+  actions:    action 'EOF' (noprec):   shift 8
     action 'INT' (noprec):   shift 5
     action 'error' (noprec):   error
     action '#' (noprec):   error
@@ -17,7 +17,7 @@ state 1:  items:    _startprog -> prog .
     action '#' (noprec):   accept
     action '$$' (noprec):   accept
   immediate action:   accept  gotos:state 2:  items:    prog -> File . end
-  actions:    action 'EOF' (noprec):   shift 6
+  actions:    action 'EOF' (noprec):   shift 8
     action 'INT' (noprec):   error
     action 'error' (noprec):   error
     action '#' (noprec):   error
@@ -35,13 +35,25 @@ state 3:  items:    prog -> File end .
     action 'error' (noprec):   reduce prog --> end
     action '#' (noprec):   reduce prog --> end
     action '$$' (noprec):   reduce prog --> end
-  immediate action:   reduce prog --> end  gotos:state 5:  items:    File -> 'INT' . 
-  actions:    action 'EOF' (noprec):   reduce File --> 'INT'
-    action 'INT' (noprec):   reduce File --> 'INT'
-    action 'error' (noprec):   reduce File --> 'INT'
-    action '#' (noprec):   reduce File --> 'INT'
-    action '$$' (noprec):   reduce File --> 'INT'
-  immediate action:   reduce File --> 'INT'  gotos:state 6:  items:    end -> 'EOF' . 
+  immediate action:   reduce prog --> end  gotos:state 5:  items:    File -> 'INT' . 'INT' 'INT'
+  actions:    action 'EOF' (noprec):   error
+    action 'INT' (noprec):   shift 6
+    action 'error' (noprec):   error
+    action '#' (noprec):   error
+    action '$$' (noprec):   error
+  immediate action: <none>  gotos:state 6:  items:    File -> 'INT' 'INT' . 'INT'
+  actions:    action 'EOF' (noprec):   error
+    action 'INT' (noprec):   shift 7
+    action 'error' (noprec):   error
+    action '#' (noprec):   error
+    action '$$' (noprec):   error
+  immediate action: <none>  gotos:state 7:  items:    File -> 'INT' 'INT' 'INT' . 
+  actions:    action 'EOF' (noprec):   reduce File --> 'INT' 'INT' 'INT'
+    action 'INT' (noprec):   reduce File --> 'INT' 'INT' 'INT'
+    action 'error' (noprec):   reduce File --> 'INT' 'INT' 'INT'
+    action '#' (noprec):   reduce File --> 'INT' 'INT' 'INT'
+    action '$$' (noprec):   reduce File --> 'INT' 'INT' 'INT'
+  immediate action:   reduce File --> 'INT' 'INT' 'INT'  gotos:state 8:  items:    end -> 'EOF' . 
   actions:    action 'EOF' (noprec):   reduce end --> 'EOF'
     action 'INT' (noprec):   reduce end --> 'EOF'
     action 'error' (noprec):   reduce end --> 'EOF'
