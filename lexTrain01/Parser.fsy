@@ -33,7 +33,7 @@ let getInt (expInt: Ast.Exp) : int =
 
 // Regular tokens
 %token <System.Int32> INT
-%token <string> ID
+%token <string * System.Int32> ID
 %token DIM
 
 // Misc tokens

@@ -3,7 +3,7 @@ module Parser
 type token = 
   | EOF
   | DIM
-  | ID of (string)
+  | ID of (string * System.Int32)
   | INT of (System.Int32)
 type tokenId = 
     | TOKEN_EOF

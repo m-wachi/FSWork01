@@ -38,7 +38,7 @@ let getInt (expInt: Ast.Exp) : int =
 type token = 
   | EOF
   | DIM
-  | ID of (string)
+  | ID of (string * System.Int32)
   | INT of (System.Int32)
 // This type is used to give symbolic names to token indexes, useful for error messages
 type tokenId = 
@@ -186,7 +186,7 @@ let _fsyacc_reductions ()  =    [|
                  : 'gentype_exp));
 # 187 "Parser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = parseState.GetInput(1) :?> string in
+            let _1 = parseState.GetInput(1) :?> string * System.Int32 in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (
