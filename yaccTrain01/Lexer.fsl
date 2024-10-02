@@ -1,0 +1,45 @@
+{
+
+// Opens methods related to fslex.exe
+open System
+open FSharp.Text.Lexing
+//open Oldvb2cs.Core
+
+let lexeme = LexBuffer<_>.LexemeString
+
+let newline (lexbuf: LexBuffer<_>) = 
+  // printfn "position=%A" lexbuf.StartPos
+  lexbuf.EndPos <- lexbuf.EndPos.NextLine
+
+let stripColon (s: string) : string =
+  s.Replace(":", "")
+
+let stripLParen (s: string) : string =
+  s.Replace("(", "")
+
+let stripRParen (s: string) : string =
+  s.Replace(")", "")
+
+}
+
+// Regular expressions
+let whitespace = [' ' '\t' ]
+let newline = ('\n' | '\r' '\n')
+let digit = ['0'-'9']
+//let letter = ['A'-'Z'] | ['a'-'z']
+let letter = '\Lu' | '\Ll' | '\Lt' | '\Lm' | '\Lo'
+let ident_start_char = (letter | '.')
+let ident_char = (ident_start_char | digit | '_' | '.' )
+let ident = ident_start_char ident_char*
+
+rule sts_initial = 
+  parse ['-']?digit+   { Parser.INT (Int32.Parse(lexeme lexbuf))}
+      | ("Dim" | "dim")          { Parser.DIM }
+      | letter+         { Parser.ID ((lexeme lexbuf), (lexbuf.EndPos.Line))}
+      | whitespace	   { sts_initial lexbuf }
+      | newline	  { newline lexbuf; sts_initial lexbuf }
+      | _    		  { failwith ("ParseError" + LexBuffer<_>.LexemeString lexbuf) }
+      | eof   	  { Parser.EOF }
+{
+
+}

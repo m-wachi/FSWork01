@@ -1,0 +1,64 @@
+%{
+open Ast    
+(*
+let parse_error a =
+    printfn "parse_error called."
+*)
+
+
+//This works. but I don't know why...
+let parse_error_rich =
+    let f (ectx : FSharp.Text.Parsing.ParseErrorContext<_>) = 
+        let currTok = ectx.CurrentToken
+        match currTok with
+        | Some t -> printfn "parse_error. CurrentToken = %A" t
+        | None -> printfn   "parse_error."
+        printfn "            ParseState = %A" ectx.ParseState
+        printfn "            StateStack = %A" ectx.StateStack
+        printfn "            ReduceTokens = %A" ectx.ReduceTokens
+        printfn "            ShiftTokens = %A" ectx.ShiftTokens
+        printfn "----"
+        ()
+    Some f
+
+let getInt (expInt: Ast.Exp) : int =
+    match expInt with
+    | Ast.IntExp v -> v
+    | _ -> 0
+
+%}
+
+// The start token becomes a parser function in the compiled code:
+%start prog
+
+// Regular tokens
+%token <System.Int32> INT
+%token <string * System.Int32> ID
+%token DIM
+
+// Misc tokens
+%token EOF
+
+// This is the type of the data produced by a successful reduction of the 'start'
+// symbol:
+%type < Ast.Prog > prog
+
+%%
+
+// These are the rules of the grammar along with the F# code of the 
+// actions executed as rules are reduced.  
+prog: exps end { Prog $1 }
+      | end      { $1 }
+
+exps:
+    exp                        { [$1] }
+    | exp exps                 { $1 :: $2 }
+
+exp:
+    | INT                      { Ast.IntExp $1 }
+    | ID                       { Ast.VarExp $1 }
+    | DIM                      { Ast.DimExp }
+
+// Using F# keywords for nonterminal names is okay.
+end: EOF { Prog [] }
+
