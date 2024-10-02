@@ -13,8 +13,16 @@ module Ast
         | IntExp of int
         | VarExp of (string * int)
         | DimExp
+    and Var = 
+        | SimpleVar of Symbol
+
+    type Statement = 
+        | AssignStmt of objExp1: Var * expr2: Exp * bSet: bool
+        | BlankLine
+    and StatementBlock = Statement list
 
     type Prog = Prog of Exp list
+
 
     let exprToStr expr =
         match expr with

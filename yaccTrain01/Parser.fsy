@@ -34,7 +34,9 @@ let getInt (expInt: Ast.Exp) : int =
 // Regular tokens
 %token <System.Int32> INT
 %token <string * System.Int32> ID
+%token EQUAL
 %token DIM
+%token LINE_TERM
 
 // Misc tokens
 %token EOF
@@ -42,22 +44,36 @@ let getInt (expInt: Ast.Exp) : int =
 // This is the type of the data produced by a successful reduction of the 'start'
 // symbol:
 %type < Ast.Prog > prog
+%type < Ast.Statement > statement
 
 %%
 
 // These are the rules of the grammar along with the F# code of the 
 // actions executed as rules are reduced.  
-prog: exps end { Prog $1 }
+prog: statement_block end { Prog $1 }
       | end      { $1 }
+
+statement_block:
+    statement_line                   { [ $1 ] }
+    | statement_line statement_block { $1 :: $2 }
+    
+statement_line:
+    statement LINE_TERM                  { $1 }
+    | LINE_TERM                          { Ast.BlankLine }
+
+statement:
+    objExp EQUAL exp              { Ast.AssignStmt ($1, $3, false) }
 
 exps:
     exp                        { [$1] }
     | exp exps                 { $1 :: $2 }
 
 exp:
-    | INT                      { Ast.IntExp $1 }
-    | ID                       { Ast.VarExp $1 }
-    | DIM                      { Ast.DimExp }
+    INT                      { Ast.IntExp $1 }
+    | objExp                  { Ast.VarExp $1 }
+
+objExp: 
+    ID                                { Ast.SimpleVar $1 }
 
 // Using F# keywords for nonterminal names is okay.
 end: EOF { Prog [] }
