@@ -9,10 +9,18 @@ module Ast
    
     type Comment = string
 
+    type BoolCmpOper =
+        | BoolCmpOpEq       // =
+
     type Exp = 
         | IntExp of int
-        | VarExp of (string * int)
+        | VarExp of Var
         | DimExp
+        | ExpBool of BoolExp
+
+    and BoolExp =
+        | BoolExpCmp of left: Exp * right: Exp * oper: BoolCmpOper
+
     and Var = 
         | SimpleVar of Symbol
 
@@ -21,19 +29,27 @@ module Ast
         | BlankLine
     and StatementBlock = Statement list
 
-    type Prog = Prog of Exp list
-
+    type Prog = Prog of StatementBlock
 
     let exprToStr expr =
         match expr with
         | IntExp n -> "IntExp: " + n.ToString()
         //| StringExp s -> "StringExp: " + s
-        | VarExp (s, l) -> sprintf "VarExp: %s (line=%d)" s l
+        | VarExp vr -> sprintf "VarExp: %A " vr
         | DimExp -> "DimExp"
-        
-    let progToStr (Prog exprs) = 
-        let sExprs = List.map exprToStr exprs
+
+    let stmtToStr (stmt: Statement) : string =
+        match stmt with
+        | AssignStmt (objExp1, expr2, bSet) ->
+            let sExp1 = sprintf "%A" objExp1
+            let sExp2 = exprToStr expr2
+            sExp1 + " = " + sExp2
+        | BlankLine -> ""
+
+    let progToStr (Prog stmtBlk) = 
+
+        let sStmts = List.map stmtToStr stmtBlk
     
-        "Prog " + String.Join(", ", sExprs)
+        sprintf "Prog (\n%s\n)\n" (String.Join("\n", sStmts))
 
 

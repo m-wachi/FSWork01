@@ -70,10 +70,10 @@ exps:
 
 exp:
     INT                      { Ast.IntExp $1 }
-    | objExp                  { Ast.VarExp $1 }
+    | objExp                 { Ast.VarExp $1 }
 
 objExp: 
-    ID                                { Ast.SimpleVar $1 }
+    ID                                { Ast.SimpleVar (fst $1) }
 
 // Using F# keywords for nonterminal names is okay.
 end: EOF { Prog [] }
