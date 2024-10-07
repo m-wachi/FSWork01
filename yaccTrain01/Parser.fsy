@@ -46,6 +46,8 @@ let getInt (expInt: Ast.Exp) : int =
 %type < Ast.Prog > prog
 %type < Ast.Statement > statement
 
+%left EQUAL
+
 %%
 
 // These are the rules of the grammar along with the F# code of the 
@@ -69,8 +71,13 @@ exps:
     | exp exps                 { $1 :: $2 }
 
 exp:
-    INT                      { Ast.IntExp $1 }
-    | objExp                 { Ast.VarExp $1 }
+    INT                      { IntExp $1 }
+    | objExp                 { VarExp $1 }
+    | bool_exp               { ExpBool $1 }
+
+bool_exp:
+    exp EQUAL exp               { Ast.BoolExpCmp (left=$1, right=$3, oper=Ast.BoolCmpOpEq) }
+
 
 objExp: 
     ID                                { Ast.SimpleVar (fst $1) }

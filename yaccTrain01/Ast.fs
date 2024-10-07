@@ -31,12 +31,20 @@ module Ast
 
     type Prog = Prog of StatementBlock
 
-    let exprToStr expr =
+    let rec exprToStr expr =
         match expr with
         | IntExp n -> "IntExp: " + n.ToString()
         //| StringExp s -> "StringExp: " + s
         | VarExp vr -> sprintf "VarExp: %A " vr
         | DimExp -> "DimExp"
+        | ExpBool blExp -> 
+            sprintf "ExpBool (%s)" (boolExpToStr blExp)
+    and boolExpToStr blExp =
+        match blExp with
+        | BoolExpCmp (leftExp, rightExp, oper) ->
+            let sLeftExp = exprToStr leftExp
+            let sRightExp = exprToStr rightExp
+            sprintf "BoolExpCmp (left=%s, right=%s, oper=\"=\")" sLeftExp sRightExp
 
     let stmtToStr (stmt: Statement) : string =
         match stmt with
